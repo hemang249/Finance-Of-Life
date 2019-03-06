@@ -405,7 +405,7 @@ int PlayGame(int hiScore)                 /// hiScore is the highest score achie
                      }
                 }
 
-                printf("\t--At the end of Turn %d You Have %d remaining \n \n",nturn,remCash);
+                printf("\t--At the end of Turn %d You Have $ %d remaining \n \n",nturn,remCash);
             }
 
         remCash = Fortune(remCash);
