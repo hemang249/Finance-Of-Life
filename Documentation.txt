@@ -1,0 +1,357 @@
+/* DOCUMENTATION */
+
+
+****** DEFINTIONS OF FUNCTIONS AND VARIABLES UTILISED **********
+
+====================================================================================================================================================
+//  DiceRoll()
+
+== This function is utilised to simulate the roll of a dice.
+   The dice is biased with following probabilities
+           1 - 0.083
+           2 - 0.194
+           3 - 0.305
+           4 - 0.250
+           5 - 0.138
+           6 - 0.027
+
+   Algorithm utilised :         Generate first random number say  x = rand() % 6 + 1
+                                Generate second random number say y = rand() % 6 + 1
+                                Dice value obtained = (x+y)/2
+
+Code:
+**********************************************************************************
+int DiceRoll()    /// Simulates Roll of a dice                                   *
+{                                                                                *
+   time_t t ;                                                                    *
+   srand(time(&t));                                                              *
+   int l = ( (rand()%6) + 1 );                                                   *
+   srand(time(&t));                                                              *
+   int h = ( (rand()%6) + 1 );                                                   *
+   return ((l+h) / 2);         /// As dice value starts from 1 and not 0         *
+}                                                                                *
+********************************************************************************** 			
+
+   The reason for introducing the bias is that , the probability of getting a higher quality job should be lower compared to normal / lower quality jobs
+
+
+
+====================================================================================================================================================
+// CareerChoice(int diceVal)
+
+== This function is utilised to decide the career based on the value of DiceRoll
+
+Code:
+
+***********************************************************************************
+int Careerchoice(int diceVal)   /// Allots Career based on Dice roll              *
+{                                                                                 *
+    enum career {DOCTOR=1 , ENGINEER , TEACHER , ARTIST , SCIENTIST , MANAGER };  *
+    switch(diceVal)                                                               *
+    {                                                                             *
+        case 1: return 1;                                                         *
+        case 2: return 2;                                                         *
+        case 3: return 3;                                                         *
+        case 4: return 4;                                                         *
+        case 5: return 5;                                                         *
+        case 6: return 6;                                                         *
+    }                                                                             *
+                                                                                  *
+    return 0;                                                                     *
+}                                                                                 *
+***********************************************************************************
+
+
+====================================================================================================================================================
+// Salary(career)
+
+== This function is utilised to decide salary based on Type of Career
+
+       1) Doctor = 50,000
+       2) Engineer = 30,000
+       3) Teacher = 20,000
+       4) Artist = 25,000
+       5) Scientist = 40,000
+       6) Manager = 45,000
+
+code:
+
+****************************************************************
+int Salary(int career)    /// Allots salary based on Career    *
+{                                                              *
+    switch(career)                                             *
+    {                                                          *
+        case 1: return 50000; break;                           *
+        case 2: return 30000; break;                           *
+        case 3: return 20000; break;                           *
+        case 4: return 25000; break;                           *
+        case 5: return 40000; break;                           *
+        case 6: return 45000; break;                           *
+    }                                                          *
+    return 0;                                                  *
+}                                                              *
+****************************************************************
+
+====================================================================================================================================================
+// Invest(remCash)
+
+== This function is given control in case the user chooses to invest as his move.
+    
+   There are 3 investment choices : Gold , Real Estate and Stock Market
+   Based on users choice it transfers the control to Invest_In Function and after re-receiving control it returns the value of remCash.
+
+Code:
+
+**************************************************************************************************************************************
+int Invest(int remCash)    /// Simulates the Investment                                                                              *
+{                                                                                                                                    *
+    int choice ;                                                                                                                     *
+                                                                                                                                     *
+    printf("\t\tYou must invest a minimum of 1000 in Gold \n");                                                                      *
+    printf("\t\tYou must invest a minimum of 10000 in Real Estate \n");                                                              *
+    printf("\t\tYou must invest a minimum of 3000 in Stock Market \n");                                                              *
+                                                                                                                                     *
+    choose:                                                                                                                          *
+    printf("\n\t\tPress 1 to invest in Gold\n\t\tPress 2 to Invest in Real estate\n\t\tPress 3 to invest in Stock Market \n");       *
+    scanf("%d",&choice);                                                                                                             *
+                                                                                                                                     *
+    if(choice == 1 || choice == 2 || choice == 3)                                                                                    *
+          remCash = Invest_in(remCash , choice);                                                                                     *
+    else                                                                                                                             *
+        goto choose;                                                                                                                 *
+                                                                                                                                     *
+                                                                                                                                     *
+    return remCash;                                                                                                                  *
+                                                                                                                                     *
+}                                                                                                                                    *
+**************************************************************************************************************************************
+
+
+====================================================================================================================================================
+// Invest_In(remCash , choice)
+
+   This function controls the investment in accordance with  choice (Gold , real estate and Stocks) made by user
+   The function calculates the chance of incurring a loss which is 1 in 3
+   The function calculated the luck factor too using the aforementioned algorithm. It calculates the % profit or loss (1 to 5 %)
+   It also makes sure user doesnt invest what he doesnt have and also makes sure if he invests he meets the minimum requirement for
+   investing in the particular field.
+   Finally the profit and losses are calculated and then added or subtracted respectively from the remCash. Finally the value of remCash
+   is returned to the function Invest
+  
+Code:
+
+***********************************************************************************************************************
+int Invest_in(int remCash , int choice)    /// Choice based Investment in either Gold or Real estate or Stocks        *
+{                                                                                                                     *
+    time_t x;                                                                                                         *
+    srand(time(&x));                                                                                                  *
+    time_t t;                                                                                                         *
+    srand(time(&t));                                                                                                  *
+    int l = rand()%5 + 1;                                                                                             *
+    srand(time(&t));                                                                                                  *
+    int h = rand()%5 + 1;                                                                                             *
+                                                                                                                      *
+    float  chance = (int)((l+h)/2);           ///  1 in 3 chance of Incurring A loss                                  *
+    float luck =  (int)(rand()%5 + 1) ;      /// Return of 0 to 5% profit or loss                                     *
+    int investAmt , min;                     /// min is the minimum amt a user must invest in a particular field      *
+                                                                                                                      *
+     switch(choice)                                                                                                   *
+     {                                                                                                                *
+         case 1:  min = MINGOLD;                                                                                      *
+                  if(remCash < MINGOLD)                                                                               *
+                  {                                                                                                   *
+                      printf("\t\t--You have insufficient funds to invest in Gold \n");                               *
+                      return remCash;                                                                                 *
+                  } break;                                                                                            *
+        case 2: min = MINRE;                                                                                          *
+                if(remCash < MINRE)                                                                                   *
+                {                                                                                                     *
+                    printf("\t\t--You have insufficient funds to invest in Real estate \n");                          *
+                    Invest(remCash);                                                                                  *
+                } break;                                                                                              *
+                                                                                                                      *
+        case 3: min = MINSTOCK;                                                                                       *
+                if(remCash < MINSTOCK)                                                                                *
+                {                                                                                                     *
+                    printf("\t\t--You have insufficient funds to invest in Stock Market \n");                         *
+                    Invest(remCash);                                                                                  *
+                }                                          							      *
+														      *
+     }														      *
+														      *
+														      *
+     retry:													      *
+    printf("\t\tHow much to invest  ? You will get a return of 0 to 5 percentage based on your luck \n");	      *
+    scanf("%d",&investAmt );											      *
+														      *
+    if(investAmt > remCash)    /// Makes sure User doesn't invest what he doesn't have				      *
+    {														      *
+        printf("\t\tYou cannot invest more than you have \n");							      *
+														      *
+         goto retry;                                                                                                  *
+    }                                                                                                                 *
+    else if(investAmt < min)   /// To make sure user invests atleast the minimum amount                               *
+    {                                                                                                                 *
+        printf("\t\tYou must invest a minimum of %d \n",min);                                                         *
+        goto retry;                                                                                                   *
+    }                                                                                                                 *
+                                                                                                                      *
+                                                                                                                      *
+    remCash -= investAmt;    /// Subtracts investment Amount from Remaining cash                                      *
+                                                                                                                      *
+    printf("\t\tYou have %d remaining after investing \n",remCash);                                                   *
+                                                                                                                      *
+    if(chance == 1)   /// Based on Luck decides whether to incurr a loss or a Profit                                  *
+    {                                                                                                                 *
+        investAmt += (investAmt * luck )/ 10;                                                                         *
+        printf("\n\t\t--You have incurred a loss of %d \n\n\n",investAmt);                                            *
+        remCash -= investAmt;         /// Subtract the losses from the remaining cash                                 *
+    }                                                                                                                 *
+    else                                                                                                              *
+    {                                                                                                                 *
+        investAmt += (investAmt * luck) / 10;                                                                         *
+        printf("\n\t\t--Your Investment profit = %d \n\n\n",investAmt);                                               *
+        remCash += investAmt;         /// Add the profits to the remaining cash                                       *
+                                                                                                                      *
+    }                                                                                                                 *
+    return remCash;                                                                                                   *
+                                                                                                                      *
+}                                                                                                                     * 
+***********************************************************************************************************************
+
+
+====================================================================================================================================================
+
+// RandomExpense(remCash)
+
+   This function is used to determine a random expense to be incurred by the player at the end of every 3rd Turn every Year.
+   There are 6 possibilities of random expenses based on the dice result.
+
+   1 - No expense
+   2 - Medical Expense 40% of remCash
+   3 - Criminal Expense 20% of remCash
+   4 - Housing Expense 15% of remCash
+   5 - Banking Expense 50% of remCash
+   6 - Vehicular Expense 30% of remCash
+ 
+  Code:
+
+**************************************************************************************************************************'
+int RandomExpense(int remCash)    /// Generates a random expense                                                            
+{
+    int choice , dice;
+
+    roll:
+    printf("This is a Expense Turn , Roll the dice by pressing 1 \n");
+    scanf("%d",&choice);
+
+    if(choice==1)    /// Makes sure user presses 1 and not any other key
+    {
+        dice = DiceRoll();
+    }
+    else
+    {
+        printf("Enter a valid Input \n");
+        goto roll;
+    }
+
+    switch(dice)  /// Determines expenses based on Roll of a dice
+    {
+        case 1: printf("You have incurred No expense \n");
+                break;
+        case 2: printf("You have incurred a Medical expense worth %d \n",(40 * remCash) / 100);
+                remCash -= (40 * remCash) / 100;
+                break;
+        case 3: printf("You have incurred a Fine for A Crime worth %d \n",(20 * remCash) / 100);
+                remCash -= (20 * remCash) / 100;
+                break;
+        case 4: printf("You have incurred Housing Expense worth %d \n",(15 * remCash) / 100);
+                remCash -= (15 * remCash) / 100;
+                break;
+        case 5: printf("You have incurred Banking Expense worth %d \n",(50 * remCash) / 100 );
+                remCash -= (50 * remCash) / 100;
+                break;
+        case 6: printf("You have incurred Vehicular Expense worth %d \n",(30 * remCash) / 100);
+                remCash -= (30 * remCash) / 100;
+                break;
+
+ }
+
+  return remCash;
+}                                
+**************************************************************************************************************************
+
+====================================================================================================================================================
+
+// Growth(sal)
+
+   This function is used to decide growth within the current employement. There is a one in 3 chance of either Promotion , demotion or Stagnancy
+
+Code:
+
+***************************************************************************************************************************
+int Growth(int sal)     /// Decides Growth
+{
+    time_t t;
+    srand(time(&t));
+
+    switch(rand()%3 + 1)    /// Based on chance decide Promotion , demotion or Stagnancy
+    {
+        case 1: printf("\t You were promoted and your salary increases by 3000 \n");
+                sal+=3000;
+                break;
+        case 2: printf("\t Unfortunately you were demoted and your salary is decreased by 3000 \n");
+                sal -= 3000;
+                break;
+        case 3: printf("\t No Change , Salary remains same \n");
+                break;
+    }
+
+    return sal;
+}
+*****************************************************************************************************************************
+
+========================================================================================================================================================
+
+// Fortune(remCash)
+
+   This function rolls the dice to test a player's luck to see whether he gets a fortune or not.
+   The chances of getting a fortune are 1 in 6
+   The fortune is 10% of remCash
+
+Code:
+
+*******************************************************************************************************************************
+int Fortune(int remCash)
+{
+    int chance , choice , fort;
+
+    roll:
+    printf("There is a 1 in 6 chance of Getting a Fortune \nRoll the dice by pressing 1 \n");
+    scanf("%d",&choice);
+
+    if(choice == 1)
+        chance = DiceRoll();
+    else
+        goto roll;
+
+    if(chance == 1)
+    {
+        fort = (int) (10.0 * remCash) / 100;                  /// 10% fortune to be received
+        printf("You have received a fortune of %d \n",fort);
+        remCash += fort;
+        printf("You have %d remaining \n",remCash);
+    }
+    else
+    {
+        printf("Bad Luck ! You have received no fortune \n");
+    }
+
+    return remCash;
+}
+************************************************************************************************************************************
+
+==================================================================================================================================================
+
+
+

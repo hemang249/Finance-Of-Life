@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1545215488 source:e:\portfolio\financeoflife\main.c
+	<stdio.h>
+	<GFILES.h>
+	<windows.h>
+
+1545294698 e:\portfolio\financeoflife\\gfiles.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
